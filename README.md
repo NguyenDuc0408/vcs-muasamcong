@@ -29,22 +29,18 @@ Bạn đưa vào một **bản tin đấu thầu** (file Excel liệt kê các m
 
 Bạn không cần làm gì thêm sau bước 1. Muốn xem kết quả, mở thư mục `calculated_files` và lấy file có ngày giờ mới nhất.
 
-## Cách nhận thông báo khi xong
+## Cách xem kết quả mới
 
-Mỗi khi hệ thống xử lý xong một bản tin, nó đăng một **Release** trên GitHub, kèm sẵn file kết quả để tải về. Bạn nhận thông báo như sau (cần có tài khoản GitHub):
+Hệ thống không gửi thông báo. Mỗi khi xử lý xong một bản tin, nó đăng một **Release** trên GitHub, kèm sẵn file kết quả để tải về. Bạn chỉ cần vào xem danh sách này:
 
-1. Mở trang dự án trên GitHub, bấm nút **Watch** ở góc trên bên phải.
-2. Chọn **Custom**, tick vào **Releases**, rồi bấm **Apply**.
+1. Mở trang dự án trên GitHub.
+2. Ở cột bên phải, bấm vào mục **Releases**.
+3. Release **trên cùng** là kết quả mới nhất. Tên Release chính là tên file kết quả, có ngày giờ chạy ở cuối.
+4. Kéo xuống phần **Assets** của Release đó và bấm vào file `.xlsx` để tải về.
 
-Từ đó, mỗi lần có kết quả mới bạn sẽ nhận:
-- một email có đường dẫn tới trang tải file,
-- thông báo trên chuông của GitHub và trên ứng dụng GitHub trên điện thoại.
+Bạn cũng có thể lấy file trong thư mục [calculated_files](https://github.com/NguyenDuc0408/vcs-muasamcong/tree/main/calculated_files). File có ngày giờ lớn nhất trong tên là mới nhất.
 
-Nếu không nhận được email, vào **Settings → Notifications** trong tài khoản GitHub của bạn và kiểm tra mục email đã được bật chưa.
-
-Bạn cũng có thể không cần theo dõi, mà tự vào mục **Releases** của dự án để tải file kết quả mới nhất.
-
-Lưu ý: nếu hệ thống gặp lỗi và không tạo được kết quả thì sẽ không có Release nào được đăng, nên cũng không có thông báo. Khi chờ lâu mà chưa thấy, hãy liên hệ người quản trị để kiểm tra.
+Lưu ý: nếu hệ thống gặp lỗi và không tạo được kết quả thì sẽ không có Release mới. Khi chờ lâu mà chưa thấy, hãy liên hệ người quản trị để kiểm tra.
 
 ## File kết quả có những gì
 
