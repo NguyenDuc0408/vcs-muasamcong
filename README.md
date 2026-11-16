@@ -2,91 +2,57 @@
 
 Dự án tính toán thông tin mua sắm công, dữ liệu được lấy từ trang public https://muasamcong.mof.gov.vn/
 
-## Mục đích
+## Dự án này làm gì
 
-Từ **bản tin đấu thầu** (file Excel liệt kê các Số TBMT), hệ thống tự tra cứu trên Hệ thống mạng đấu thầu quốc gia (muasamcong.mof.gov.vn) rồi tạo ra **file Excel kết quả** gồm:
+Bạn đưa vào một **bản tin đấu thầu** (file Excel liệt kê các mã thông báo mời thầu). Hệ thống tự tra từng mã trên trang Mua sắm công của Bộ Tài chính, rồi trả về một **file Excel kết quả** cho biết:
 
-- Trạng thái từng TBMT (đang xét thầu, huỷ, không có nhà thầu trúng, hoặc tên nhà thầu trúng).
-- Kế hoạch lựa chọn nhà thầu (KHLCNT) tương ứng với từng TBMT.
-- Phân loại các gói thầu thuộc lĩnh vực **An toàn thông tin (ATTT)** theo danh sách từ khoá.
-- Tổng tiền kế hoạch ATTT và dự toán còn lại theo từng chủ đầu tư, từng năm.
-- Thống kê nhà thầu trúng thầu.
+- Mỗi thông báo mời thầu hiện đang ở trạng thái nào: đang xét thầu, đã huỷ, không có nhà thầu trúng, hay đã có nhà thầu trúng (kèm tên nhà thầu).
+- Gói thầu đó thuộc kế hoạch lựa chọn nhà thầu nào.
+- Gói thầu nào thuộc lĩnh vực **An toàn thông tin**.
+- Với từng chủ đầu tư theo từng năm: tổng tiền kế hoạch cho các gói An toàn thông tin là bao nhiêu, và còn lại bao nhiêu chưa có nhà thầu trúng.
+- Từng nhà thầu đã trúng bao nhiêu gói, với tổng giá trị bao nhiêu.
 
-## Cấu trúc thư mục
+## Các thư mục trong dự án
 
-```
-vcs-muasamcong/
-├── README.md              # Tài liệu tổng quan (file này)
-├── origin_files/          # Đầu vào: các file bản tin đấu thầu gốc (.xlsx)
-│   └── README.md
-└── calculated_files/      # Đầu ra: các file kết quả đã tính toán (.xlsx)
-    └── README.md
-```
-
-| Thư mục | Vai trò | Ai ghi vào |
+| Thư mục | Chứa gì | Ai đưa file vào |
 |---|---|---|
-| [origin_files/](origin_files/README.md) | Chứa file bản tin gốc | Người dùng upload thủ công |
-| [calculated_files/](calculated_files/README.md) | Chứa file kết quả theo từng lần chạy | Server tự động commit |
+| [origin_files](origin_files/README.md) | Bản tin đấu thầu gốc (file đầu vào) | Bạn tự tải lên |
+| [calculated_files](calculated_files/README.md) | File kết quả sau khi tính (file đầu ra) | Hệ thống tự thêm vào |
+| config | File cài đặt mà hệ thống dùng khi chạy: khoá truy cập vào trang Mua sắm công và danh sách từ khoá để nhận biết gói thầu An toàn thông tin | Người quản trị chỉnh khi cần |
 
-## Luồng xử lý
+## Cách hoạt động
 
-```
- Người dùng upload file bản tin
-            │
-            ▼
-   origin_files/<tên file>.xlsx
-            │   (server chạy cron, git pull)
-            ▼
-   Chọn file mới nhất (theo thời điểm commit) chưa được xử lý
-            │
-            ▼
-   Chạy script tra_cuu_muasamcong.py
-   (gọi API muasamcong: TBMT → kế hoạch → gói thầu → TBMT bổ sung)
-            │
-            ▼
-   calculated_files/<tên file>_<YYYYMMDD_HHMMSS>.xlsx
-            │   (server commit + push)
-            ▼
-          GitHub
-```
+1. Bạn tải bản tin đấu thầu mới lên thư mục `origin_files`.
+2. Hệ thống trên máy chủ tự kiểm tra định kỳ. Khi thấy có bản tin mới chưa xử lý, nó sẽ bắt đầu tra cứu.
+3. Hệ thống lần lượt tra từng mã thông báo mời thầu trên trang Mua sắm công, rồi tổng hợp thành file kết quả.
+4. File kết quả được lưu vào thư mục `calculated_files`. Tên file giống file gốc, thêm ngày giờ lúc bắt đầu chạy ở cuối.
 
-1. Người dùng upload bản tin mới vào `origin_files/`.
-2. Server có cron định kỳ `git pull`, xác định file mới nhất (theo thời điểm commit lên GitHub) và so với file đã xử lý lần trước. Chỉ xử lý khi có file mới.
-3. Server chạy script tra cứu, sinh file kết quả.
-4. File kết quả được đặt vào `calculated_files/` với **cùng tên file gốc, thêm hậu tố thời gian lúc chạy**, rồi commit và push lên GitHub.
+Bạn không cần làm gì thêm sau bước 1. Muốn xem kết quả, mở thư mục `calculated_files` và lấy file có ngày giờ mới nhất.
 
-> Trạng thái: thư mục `origin_files/` và `calculated_files/` đã được tạo. Script tra cứu hiện nằm ở thư mục `mua_sam_cong/` (ngoài repo này) và phần tự động hoá bằng cron đang trong giai đoạn thiết kế.
+## File kết quả có những gì
 
-## Kết quả gồm những gì
-
-File kết quả giữ nguyên sheet gốc và thêm các sheet tính toán:
+Mỗi file kết quả là một file Excel gồm nhiều trang tính (sheet):
 
 | Sheet | Nội dung |
 |---|---|
-| `Muasamcong` | Sheet gốc của bản tin, **không bị sửa** |
-| `muasamcong_refactor` | Các dòng từ năm 2023 trở đi, đã bỏ TBMT trạng thái `DHT`, chỉ giữ một dòng cho mỗi TBMT (phiên bản mới nhất), kèm các cột do công cụ bổ sung |
-| `Gói ATTT` | Danh sách gói thầu thuộc lĩnh vực ATTT, kèm giá và trạng thái đã có nhà thầu trúng hay chưa |
-| `Kế hoạch chủ đầu tư` | Tổng hợp theo năm và chủ đầu tư: tổng tiền kế hoạch ATTT, dự toán còn lại, chênh lệch và ghi chú |
-| `Nhà thầu trúng thầu` | Tổng hợp theo năm và nhà thầu: số gói và tổng giá trúng |
+| Muasamcong | Bản tin gốc, giữ nguyên, không bị sửa |
+| muasamcong_refactor | Dữ liệu đã được làm sạch: chỉ lấy từ năm 2023 trở đi, mỗi mã thông báo chỉ còn một dòng, kèm trạng thái và tên nhà thầu trúng |
+| Gói ATTT | Danh sách các gói thầu thuộc lĩnh vực An toàn thông tin |
+| Kế hoạch chủ đầu tư | Theo từng năm và từng chủ đầu tư: tổng tiền kế hoạch, số còn lại và ghi chú giải thích |
+| Nhà thầu trúng thầu | Theo từng năm và từng nhà thầu: số gói và tổng giá trị đã trúng |
 
-Các ô tổng hợp là **công thức Excel** tham chiếu về sheet dữ liệu nên có thể kiểm tra lại. Excel sẽ tự tính khi mở file. Các trình xem trước (ví dụ xem trực tiếp trên GitHub hoặc chế độ Protected View) có thể hiển thị ô trống.
+Các con số tổng hợp được Excel tự tính khi bạn mở file, nên hãy mở bằng Microsoft Excel. Nếu xem trước ngay trên trang web, các ô này có thể hiện trống.
 
-Nhãn trong cột "Đơn vị trúng thầu" của sheet `muasamcong_refactor`:
+Trong cột "Đơn vị trúng thầu", ngoài tên nhà thầu còn có các nhãn sau:
 
 | Nhãn | Ý nghĩa |
 |---|---|
-| Tên nhà thầu | TBMT đã có nhà thầu trúng |
-| Đang xét thầu | Chưa có kết quả lựa chọn nhà thầu |
-| Không có nhà thầu trúng | Gói thầu đã kết thúc nhưng không có nhà thầu trúng |
-| Huỷ TBMT | TBMT đã bị huỷ, không tính vào tổng tiền kế hoạch của chủ đầu tư |
+| Đang xét thầu | Chưa có kết quả chọn nhà thầu |
+| Không có nhà thầu trúng | Gói thầu đã kết thúc nhưng không chọn được nhà thầu |
+| Huỷ TBMT | Thông báo mời thầu đã bị huỷ. Gói này không được tính vào tổng tiền kế hoạch của chủ đầu tư |
 
-## Cấu hình và bảo mật
+## Lưu ý về thông tin
 
-- Công cụ cần một **token** để gọi API, đặt trong `config.yaml`. File này **tuyệt đối không commit** lên repo.
-- Danh sách từ khoá nhận diện gói thầu ATTT (`attt_keywords`: strong / weak / exclude) cũng nằm trong `config.yaml`.
-- Các file cache JSON (`*_api.json`, `*_plan.json`, `*_goi_thau.json`, `*_tbmt_goi.json`) chỉ phục vụ chạy nhanh hơn, giữ trên server và **không commit**.
-- Bản tin đấu thầu và file kết quả chứa thông tin nội bộ (kế hoạch, dự toán). Nên đặt repo ở chế độ **private**.
-
-## Hướng dẫn sử dụng script
-
-Chi tiết cách chạy thủ công, các tham số dòng lệnh và giải thích từng cột xem trong `HUONG_DAN_SU_DUNG.md` của thư mục `mua_sam_cong/`.
+- Bản tin đấu thầu và file kết quả có thông tin nội bộ về kế hoạch và dự toán. Hãy chắc chắn dự án này chỉ chia sẻ cho đúng người cần xem.
+- Khi khoá truy cập vào trang Mua sắm công hết hạn, chỉ cần thay khoá mới trong file cài đặt ở thư mục `config`. Không cần chỉnh gì ở máy chủ.
+- Cách chạy thủ công và giải thích chi tiết từng cột nằm trong tài liệu hướng dẫn đi kèm công cụ tra cứu (không nằm trong dự án này).

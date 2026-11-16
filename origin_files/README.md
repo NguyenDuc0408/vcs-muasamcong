@@ -1,32 +1,33 @@
 # origin_files
 
-Thư mục chứa **file đầu vào**: các bản tin đấu thầu gốc do người dùng upload. Server đọc thư mục này để quyết định file nào cần xử lý.
+Đây là nơi bạn **tải bản tin đấu thầu lên**. Hệ thống sẽ đọc các file trong thư mục này để tính toán.
 
-## File sẽ xuất hiện ở đây
+## Trong thư mục này có gì
 
-- File Excel `.xlsx` bản tin đấu thầu, ví dụ: `Thuypn2_2026_Ban tin dau thau_VCS_11112026.xlsx`.
-- Mỗi lần có bản tin mới, upload thêm một file. Không cần xoá các file cũ.
+Các file Excel (đuôi `.xlsx`) là bản tin đấu thầu, ví dụ: `Thuypn2_2026_Ban tin dau thau_VCS_11112026.xlsx`.
 
-## Yêu cầu về nội dung file
+Mỗi khi có bản tin mới, bạn tải thêm một file. Không cần xoá các file cũ.
 
-- Định dạng `.xlsx`. Sheet đầu tiên là sheet bản tin, tên mặc định `Muasamcong`.
-- Hàng 1 là hàng tiêu đề.
-- Có cột **Số TBMT** (mã thông báo mời thầu, dạng `IB2400xxxxx`). Script dựa vào cột này để tra cứu trên muasamcong.
-- Có các cột ngày đăng, giá gói thầu, chủ đầu tư và tên gói thầu như bản tin hiện tại. Công cụ sẽ tự thêm các cột kết quả, nên **không cần** chuẩn bị trước.
+## File cần có gì bên trong
 
-## Quy ước
+- Là file Excel, bản tin nằm ở trang tính đầu tiên.
+- Dòng đầu tiên là dòng tiêu đề các cột.
+- Có cột **Số TBMT** (mã thông báo mời thầu, ví dụ `IB2400123456`). Hệ thống dựa vào cột này để tra cứu.
+- Có các cột thông tin như bản tin hiện tại: ngày đăng, giá gói thầu, chủ đầu tư, tên gói thầu.
 
-- **Không sửa file đã upload.** Khi cần chỉnh nội dung, upload thành một file mới (tên khác hoặc phiên bản mới), vì server xác định file mới nhất theo thời điểm commit.
-- Tên file nên có ngày tháng để dễ phân biệt, không dùng ký tự đặc biệt như `:` hoặc `/`.
-- Không đặt file kết quả vào thư mục này. File kết quả nằm ở [calculated_files/](../calculated_files/README.md).
-- Server chỉ **đọc** thư mục này, không ghi vào đây.
+Bạn không cần tự thêm các cột kết quả. Hệ thống sẽ tự bổ sung vào file kết quả.
 
-## Cách server chọn file để xử lý
+## Quy ước khi tải file
 
-1. `git pull` định kỳ.
-2. Tìm file `.xlsx` có thời điểm commit mới nhất.
-3. Nếu file đó chưa từng được xử lý thì chạy script. Nếu đã xử lý rồi thì bỏ qua.
+- **Không sửa lại file đã tải lên.** Nếu cần chỉnh nội dung, hãy tải lên một file mới với tên khác hoặc phiên bản mới. Hệ thống luôn xử lý file được tải lên **gần nhất**.
+- Nên có ngày tháng trong tên file để dễ phân biệt.
+- Tên file không nên dùng các ký tự đặc biệt như dấu hai chấm hoặc dấu gạch chéo.
+- Không để file kết quả vào đây. Kết quả nằm ở thư mục [calculated_files](../calculated_files/README.md).
 
-## Lưu ý bảo mật
+## Sau khi tải lên thì sao
 
-Bản tin chứa thông tin nội bộ về kế hoạch đấu thầu. Hãy đảm bảo repo ở chế độ private trước khi upload dữ liệu thật.
+Hệ thống kiểm tra định kỳ. Khi thấy file mới, nó sẽ tự tra cứu rồi lưu kết quả sang thư mục `calculated_files`. File đã được xử lý rồi sẽ không bị xử lý lại, trừ khi người quản trị yêu cầu.
+
+## Lưu ý
+
+Bản tin có thông tin nội bộ về kế hoạch đấu thầu. Hãy chắc chắn dự án chỉ được chia sẻ cho đúng người trước khi tải dữ liệu thật lên.
