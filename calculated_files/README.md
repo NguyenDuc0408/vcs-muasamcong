@@ -18,6 +18,8 @@ Giờ ghi trong tên là giờ Việt Nam.
 - Cùng một bản tin chạy lại sau vài ngày có thể cho kết quả khác, vì trạng thái các gói thầu trên trang Mua sắm công thay đổi theo thời gian.
 - Muốn xem kết quả **mới nhất**, hãy mở file có ngày giờ lớn nhất trong tên.
 
+Muốn được báo mỗi khi có file kết quả mới, xem mục "Cách nhận thông báo khi xong" trong [README chính](../README.md).
+
 ## Bên trong mỗi file kết quả
 
 | Sheet | Nội dung |

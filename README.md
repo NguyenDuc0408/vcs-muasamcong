@@ -29,6 +29,23 @@ Bạn đưa vào một **bản tin đấu thầu** (file Excel liệt kê các m
 
 Bạn không cần làm gì thêm sau bước 1. Muốn xem kết quả, mở thư mục `calculated_files` và lấy file có ngày giờ mới nhất.
 
+## Cách nhận thông báo khi xong
+
+Mỗi khi hệ thống xử lý xong một bản tin, nó đăng một **Release** trên GitHub, kèm sẵn file kết quả để tải về. Bạn nhận thông báo như sau (cần có tài khoản GitHub):
+
+1. Mở trang dự án trên GitHub, bấm nút **Watch** ở góc trên bên phải.
+2. Chọn **Custom**, tick vào **Releases**, rồi bấm **Apply**.
+
+Từ đó, mỗi lần có kết quả mới bạn sẽ nhận:
+- một email có đường dẫn tới trang tải file,
+- thông báo trên chuông của GitHub và trên ứng dụng GitHub trên điện thoại.
+
+Nếu không nhận được email, vào **Settings → Notifications** trong tài khoản GitHub của bạn và kiểm tra mục email đã được bật chưa.
+
+Bạn cũng có thể không cần theo dõi, mà tự vào mục **Releases** của dự án để tải file kết quả mới nhất.
+
+Lưu ý: nếu hệ thống gặp lỗi và không tạo được kết quả thì sẽ không có Release nào được đăng, nên cũng không có thông báo. Khi chờ lâu mà chưa thấy, hãy liên hệ người quản trị để kiểm tra.
+
 ## File kết quả có những gì
 
 Mỗi file kết quả là một file Excel gồm nhiều trang tính (sheet):
